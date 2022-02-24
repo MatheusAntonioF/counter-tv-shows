@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const DEFAULT_LANGUAGE = 'pt-BR';
+
 const api = axios.create({
-  baseURL: 'https://imdb-api.com/br/API',
+  baseURL: 'https://api.themoviedb.org/3/',
 });
 
-export { api };
+export { api, DEFAULT_LANGUAGE };
