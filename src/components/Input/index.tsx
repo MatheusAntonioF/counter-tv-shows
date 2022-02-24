@@ -1,13 +1,17 @@
 import { forwardRef, ForwardRefRenderFunction } from 'react';
 
 import {
+  FormControl,
   FormErrorMessage,
   FormLabel,
   Input as ChakraInput,
   InputProps,
   useColorModeValue,
 } from '@chakra-ui/react';
+
 import { FieldError } from 'react-hook-form';
+
+import './input.styles.scss';
 
 interface IInputProps extends InputProps {
   label: string;
@@ -15,13 +19,17 @@ interface IInputProps extends InputProps {
 }
 
 const Input: ForwardRefRenderFunction<HTMLInputElement, IInputProps> = (
-  { label, error, ...rest },
+  { label, error, isDisabled, ...rest },
   ref
 ) => {
   return (
-    <>
+    <FormControl
+      isRequired
+      isInvalid={!!error?.message}
+      isDisabled={isDisabled}
+    >
       <FormLabel
-        fontSize={{ base: 'sm', sm: 'md' }}
+        fontSize="sm"
         color={useColorModeValue('gray.800', 'gray.400')}
       >
         {label}
@@ -29,11 +37,13 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, IInputProps> = (
       <ChakraInput
         ref={ref}
         isInvalid={!!error?.message}
+        isRequired
         _placeholder={{ color: 'gray.500' }}
+        isDisabled={isDisabled}
         {...rest}
       />
       <FormErrorMessage>{error?.message}</FormErrorMessage>
-    </>
+    </FormControl>
   );
 };
 

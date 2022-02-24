@@ -3,6 +3,8 @@ import React from 'react';
 
 import { OptionProps } from 'react-select';
 
+import fallbackImg from '../../../../assets/fallback-img.png';
+
 import { ISelectOption } from '../';
 
 const OptionWithThumbnail: React.FC<OptionProps> = ({
@@ -30,6 +32,7 @@ const OptionWithThumbnail: React.FC<OptionProps> = ({
           borderRadius="2xl"
           src={thumbnail}
           alt={label}
+          fallbackSrc={fallbackImg}
         />
       )}
       <Flex

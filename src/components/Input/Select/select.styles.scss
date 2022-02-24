@@ -1,0 +1,29 @@
+.react_select-component__placeholder {
+  font-size: 0.9rem;
+}
+
+.react_select-component__indicator-separator {
+  display: none;
+}
+
+.react_select-component__clear-indicator {
+  cursor: pointer;
+}
+
+.react-select__is-errored > .react_select-component__control {
+  border-color: #e53e3e !important;
+}
+
+.react_select-component__control--is-disabled {
+  cursor: not-allowed !important;
+  border-color: inherit !important;
+  background: inherit !important;
+
+  &:hover {
+    border-color: var(--chakra-colors-gray-300);
+  }
+
+  .react_select-component__placeholder {
+    opacity: 0.4;
+  }
+}
