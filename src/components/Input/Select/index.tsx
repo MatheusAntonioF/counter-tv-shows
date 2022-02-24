@@ -6,6 +6,7 @@ import {
 } from '@chakra-ui/react';
 
 import AsyncSelect from 'react-select/async';
+import { ActionMeta } from 'react-select';
 
 import {
   FieldError,
@@ -13,21 +14,25 @@ import {
   useController,
   UseControllerProps,
 } from 'react-hook-form';
+
+import './select.styles.scss';
+
 import { OptionWithThumbnail } from './CustomOptions/OptionsWithImage';
-import { useState } from 'react';
-import { ActionMeta } from 'react-select';
 
 export interface ISelectOption {
   value: string;
   label: string;
   thumbnail?: string;
   description?: string;
+  other?: string | number | undefined;
 }
 
 type ISelectProps<T> = UseControllerProps<T> & {
   label: string;
   error?: FieldError | null;
   placeholder?: string;
+  isDisabled?: boolean;
+  defaultOptions?: boolean | undefined;
   promiseOptions: (inputValue: string) => Promise<ISelectOption[]>;
 };
 
@@ -35,12 +40,12 @@ const Select = <T extends FieldValues>({
   label,
   control,
   name,
+  isDisabled = false,
   placeholder = 'Pesquisar aqui',
+  defaultOptions = undefined,
   promiseOptions,
   ...rest
 }: ISelectProps<T>): JSX.Element => {
-  const [selectedOption, setSelectedOption] = useState({} as ISelectOption);
-
   const {
     field: { onChange, value, ...fieldProps },
     fieldState: { error },
@@ -51,9 +56,14 @@ const Select = <T extends FieldValues>({
   });
 
   return (
-    <FormControl isRequired isInvalid={!!error?.message} id={name}>
+    <FormControl
+      isRequired
+      isInvalid={!!error?.message}
+      isDisabled={isDisabled}
+      id={name}
+    >
       <FormLabel
-        fontSize={{ base: 'sm', sm: 'md' }}
+        fontSize="sm"
         color={useColorModeValue('gray.800', 'gray.400')}
       >
         {label}
@@ -61,16 +71,23 @@ const Select = <T extends FieldValues>({
       <AsyncSelect
         {...rest}
         {...fieldProps}
+        classNamePrefix="react_select-component"
+        className={error?.message && 'react-select__is-errored'}
         cacheOptions
+        defaultOptions={true}
         components={{ Option: OptionWithThumbnail }}
-        defaultOptions
         loadOptions={promiseOptions}
         placeholder={placeholder}
-        isClearable
-        onChange={(newValue: unknown, _: ActionMeta<unknown>): void => {
-          setSelectedOption(newValue as ISelectOption);
-          onChange(newValue as ISelectOption);
+        styles={{
+          container: () => ({}),
         }}
+        noOptionsMessage={() => 'Um maluco no pedaço...'}
+        loadingMessage={({ inputValue }) => `Procurando por ${inputValue}`}
+        isClearable
+        isDisabled={isDisabled}
+        onChange={(newValue: unknown, _: ActionMeta<unknown>): void =>
+          onChange(newValue as ISelectOption)
+        }
         value={value}
       />
       <FormErrorMessage>{error?.message}</FormErrorMessage>
