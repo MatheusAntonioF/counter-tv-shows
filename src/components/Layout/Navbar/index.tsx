@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
       >
         <Heading>Contador de episódios</Heading>
         <Button colorScheme="twitter" onClick={onOpen}>
-          Adicionar nova série
+          Nova série
         </Button>
       </Box>
       <ModalAddShow isOpen={isOpen} onClose={onClose} />
