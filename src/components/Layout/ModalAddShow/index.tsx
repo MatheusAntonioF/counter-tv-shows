@@ -18,10 +18,13 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { EPISODES_LOCAL_STORAGE_KEY } from '../../../config/localStorageKey';
 import { ISavedEpisodes } from '../../../dtos/IEpisodes';
+import { formatImageURL } from '../../../helpers/formats';
 import { useStorageState } from '../../../hooks/storageState';
 import { episodesMock } from '../../../mock/episodesFromSeason';
 import { tvShowMock } from '../../../mock/tvShowMock';
 import { api } from '../../../services/http/api';
+import { fetchTVShowEpisodesFromSeason } from '../../../services/http/modules/episodes';
+import { fetchTVShowDetails } from '../../../services/http/modules/tvShows';
 import { Input } from '../../Input';
 
 import { ISelectOption, Select } from '../../Input/Select';
@@ -73,64 +76,32 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
 
   const watchFormFields = watch(['tvShow', 'season']);
 
-  const fetchTvShowByName = async (inputValue: string) => {
-    // const { results }: { results: ITVShowProps[] } = await api.get(
-    //   `/SearchSeries/${import.meta.env.VITE_IMDB_API_KEY}/${inputValue}`
-    // );
-
-    const { results }: { results: ITVShowProps[] } = await new Promise(
-      resolve => {
-        setTimeout(() => {
-          const { results } = {
-            results: [tvShowMock],
-          };
-
-          const parsed: ITVShowProps[] = results.map(
-            ({ id, name, overview, backdrop_path }) => ({
-              id: String(id),
-              description: overview,
-              title: name,
-              image: `https://image.tmdb.org/t/p/original/${backdrop_path}`,
-            })
-          );
-
-          resolve({ results: parsed });
-        }, 500);
-      }
-    );
-
-    const parsedData = results.map(({ id, title, image, description }) => ({
-      value: id,
-      label: title,
-      description: description,
-      thumbnail: image,
-    }));
-
-    return parsedData;
-  }; // add try catch here
-
-  const getTVShowByName = async (inputValue: string) => {
+  const fetchTVShowByName = useCallback(async (inputValue: string) => {
     if (!inputValue)
       return [
         { value: 'Continue pesquisando...', label: 'Continue pesquisando...' },
       ];
 
-    const data = await fetchTvShowByName(inputValue);
+    const { results } = await fetchTVShowDetails(inputValue);
 
-    return data;
-  };
+    const parsedData = results.map(({ id, name, overview, poster_path }) => ({
+      value: String(id),
+      label: name,
+      description: overview,
+      thumbnail: formatImageURL(poster_path),
+    }));
+
+    return parsedData;
+  }, []);
 
   const fetchEpisodesFromSeason = useCallback(
-    async (inputValue: string) => {
-      const input = watchFormFields[0] as unknown;
+    async (_: string) => {
+      const { 0: tvShow, 1: season } = watchFormFields;
 
-      const { value } = input as ISelectOption; // Fix this in the future dumb
-
-      // const { data } = await api.get(
-      //   `https://api.themoviedb.org/3/tv/${value}/season/1?api_key=40a9ca2277bf962f6349e56c06fb8c0e&language=pt-BR`
-      // );
-
-      const { episodes } = episodesMock;
+      const { episodes } = await fetchTVShowEpisodesFromSeason({
+        tv_show_id: Number(tvShow.value),
+        season,
+      });
 
       const parsedEpisodes = episodes.map(
         ({ id, name, overview, still_path, episode_number }) => ({
@@ -162,7 +133,9 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
           number: Number(other),
         };
 
-        // setEpisodes(episodeToSave);
+        console.log(episodeToSave);
+
+        setEpisodes(episodeToSave);
 
         toast({
           title: 'Salvo com sucesso',
@@ -204,7 +177,7 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
               name="tvShow"
               control={control}
               error={errors.tvShow?.value}
-              promiseOptions={getTVShowByName}
+              promiseOptions={fetchTVShowByName}
             />
             <Stack direction="row" mt="4">
               <Box w="35%">
