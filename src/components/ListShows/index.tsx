@@ -11,8 +11,8 @@ const ListShows: React.FC = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <Box w="50%" bgColor="pink.100">
-        <Heading>Shows</Heading>
+      <Box w="62%" bgColor="pink.100" pt={12}>
+        <Heading size="xl">Séries favoritadas</Heading>
       </Box>
     </Box>
   );
