@@ -14,6 +14,8 @@ const Navbar: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="space-around"
+        bg="white"
+        position="fixed"
       >
         <Heading>Contador de episódios</Heading>
         <Button colorScheme="twitter" onClick={onOpen}>

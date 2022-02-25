@@ -20,9 +20,7 @@ import { EPISODES_LOCAL_STORAGE_KEY } from '../../../config/localStorageKey';
 import { ISavedEpisodes } from '../../../dtos/IEpisodes';
 import { formatImageURL } from '../../../helpers/formats';
 import { useStorageState } from '../../../hooks/storageState';
-import { episodesMock } from '../../../mock/episodesFromSeason';
-import { tvShowMock } from '../../../mock/tvShowMock';
-import { api } from '../../../services/http/api';
+
 import { fetchTVShowEpisodesFromSeason } from '../../../services/http/modules/episodes';
 import { fetchTVShowDetails } from '../../../services/http/modules/tvShows';
 import { Input } from '../../Input';
@@ -56,7 +54,7 @@ const schemaAddShowValidator = yup
   .required();
 
 const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
-  const [_, setEpisodes] = useStorageState({
+  const [episodes, setEpisodes] = useStorageState<ISavedEpisodes[]>({
     initialValue: [] as ISavedEpisodes[],
     labelStorage: EPISODES_LOCAL_STORAGE_KEY,
   });
@@ -120,22 +118,21 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
 
   const onSubmit = useCallback(
     ({
+      tvShow: { label: tvShowName },
       season,
-      episode: { value, label, description, thumbnail, other },
+      episode: { value, description, thumbnail, other },
     }: IFormProps) => {
       try {
         const episodeToSave: ISavedEpisodes = {
           id: Number(value),
-          name: label,
+          name: tvShowName,
           description: String(description),
           thumbnail: `https://image.tmdb.org/t/p/original${thumbnail}`,
           season_number: season,
           number: Number(other),
         };
 
-        console.log(episodeToSave);
-
-        setEpisodes(episodeToSave);
+        setEpisodes([...episodes, episodeToSave]);
 
         toast({
           title: 'Salvo com sucesso',
