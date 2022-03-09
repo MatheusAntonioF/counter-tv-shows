@@ -3,7 +3,7 @@ import React from 'react';
 import { EPISODES_LOCAL_STORAGE_KEY } from '../../config/localStorageKey';
 import { ISavedEpisodes } from '../../dtos/IEpisodes';
 import { useStorageState } from '../../hooks/storageState';
-import { TVShow } from '../TVShow';
+import { TVShow } from '../../components/TVShow';
 
 const NAVBAR_HEIGHT = '75.19px';
 
@@ -29,16 +29,9 @@ const ListShows: React.FC = () => {
         </Heading>
 
         {episodes &&
-          [
-            ...episodes,
-            ...episodes,
-            ...episodes,
-            ...episodes,
-            ...episodes,
-            ...episodes,
-            ...episodes,
-            ...episodes,
-          ].map(episode => <TVShow key={episode.id} episode={episode} />)}
+          episodes.map(episode => (
+            <TVShow key={episode.id} episode={episode} />
+          ))}
       </Box>
     </Flex>
   );

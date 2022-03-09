@@ -1,4 +1,10 @@
-import { Box, Heading, Button, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Button,
+  useDisclosure,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 import { ModalAddShow } from '../ModalAddShow';
 
@@ -14,7 +20,7 @@ const Navbar: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="space-around"
-        bg="white"
+        bg={useColorModeValue('white', 'gray.700')}
         position="fixed"
       >
         <Heading>Contador de episódios</Heading>
