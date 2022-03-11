@@ -5,7 +5,7 @@ import {
   FormControl,
 } from '@chakra-ui/react';
 
-import AsyncSelect from 'react-select/async';
+import { AsyncSelect } from 'chakra-react-select';
 import { ActionMeta } from 'react-select';
 
 import {
@@ -79,7 +79,9 @@ const Select = <T extends FieldValues>({
         loadOptions={promiseOptions}
         placeholder={placeholder}
         styles={{
-          container: () => ({}),
+          container: () => ({
+            background: useColorModeValue('gray.800', 'gray.400'),
+          }),
         }}
         noOptionsMessage={() => 'Um maluco no pedaço...'}
         loadingMessage={({ inputValue }) => `Procurando por ${inputValue}`}

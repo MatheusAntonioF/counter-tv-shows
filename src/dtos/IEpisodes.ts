@@ -16,7 +16,7 @@ export interface ISavedEpisodes {
   id: number;
   name: string;
   description: string;
-  number: number;
+  episode_number: number;
   thumbnail: string;
   season_number: number;
 }

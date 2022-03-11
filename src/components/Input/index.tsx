@@ -23,11 +23,7 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, IInputProps> = (
   ref
 ) => {
   return (
-    <FormControl
-      isRequired
-      isInvalid={!!error?.message}
-      isDisabled={isDisabled}
-    >
+    <FormControl isInvalid={!!error?.message} isDisabled={isDisabled}>
       <FormLabel
         fontSize="sm"
         color={useColorModeValue('gray.800', 'gray.400')}
@@ -37,7 +33,6 @@ const Input: ForwardRefRenderFunction<HTMLInputElement, IInputProps> = (
       <ChakraInput
         ref={ref}
         isInvalid={!!error?.message}
-        isRequired
         _placeholder={{ color: 'gray.500' }}
         isDisabled={isDisabled}
         {...rest}
