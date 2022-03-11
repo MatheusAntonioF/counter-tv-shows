@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
@@ -11,19 +19,17 @@ interface ITVShowProps {
 }
 
 const TVShow = ({
-  episode: { id, name, description, thumbnail, number, season_number },
+  episode: { name, description, thumbnail, episode_number, season_number },
 }: ITVShowProps): JSX.Element => {
   return (
     <Flex
       w="100%"
       h="250px"
-      bg="white"
       borderRadius="2xl"
       p="6"
       mt="4"
       shadow="lg"
-      transition="all 100ms ease-in"
-      _hover={{ transform: 'scale(1.02)' }}
+      bg={useColorModeValue('white', 'gray.700')}
     >
       <Box w="50%" h="100%" minW="200px">
         <Image
@@ -53,7 +59,7 @@ const TVShow = ({
               <Button variant="ghost" w="40px" mr="2">
                 <ChevronLeftIcon boxSize="10" />
               </Button>
-              <Heading>{number}</Heading>
+              <Heading size="lg">{episode_number}</Heading>
               <Button variant="ghost" w="40px" ml="2">
                 <ChevronRightIcon boxSize="10" />
               </Button>

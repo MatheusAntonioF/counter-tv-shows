@@ -1,7 +1,5 @@
 import React, { createContext, useCallback, useContext, useMemo } from 'react';
 
-import { useToast } from '@chakra-ui/react';
-
 import { apiFirebase } from '../services/http/api';
 import {
   authenticateUser,
@@ -9,7 +7,6 @@ import {
 } from '../services/http/modules/users';
 import { IUserCredentials } from '../services/http/modules/users/dtos';
 import { useStorageState } from './storageState';
-import { useNavigate } from 'react-router-dom';
 
 interface IAuthContextData {
   signIn: (authData: IUserCredentials) => Promise<void>;
@@ -17,13 +14,13 @@ interface IAuthContextData {
   signOut: () => void;
 }
 
-interface ILoggedUser {
+export interface ILoggedUser {
   id: string;
   name: string;
   token: string;
 }
 
-export const LABEL_AUTH_STORAGE = '@BUDGET_APP_AUTH';
+export const LABEL_AUTH_STORAGE = '@COUNTER_APP_AUTH';
 
 const AuthContext = createContext({} as IAuthContextData);
 
@@ -33,8 +30,6 @@ export const AuthProvider: React.FC = ({ children }) => {
       initialValue: {} as ILoggedUser,
       labelStorage: LABEL_AUTH_STORAGE,
     });
-
-  const toast = useToast();
 
   const signIn = useCallback(
     async ({ email, password }: IUserCredentials) => {

@@ -16,10 +16,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { EPISODES_LOCAL_STORAGE_KEY } from '../../../config/localStorageKey';
 import { ISavedEpisodes } from '../../../dtos/IEpisodes';
 import { formatImageURL } from '../../../helpers/formats';
-import { useStorageState } from '../../../hooks/storageState';
+import { useTvShow } from '../../../hooks/useTvShow';
 
 import { fetchTVShowEpisodesFromSeason } from '../../../services/http/modules/episodes';
 import { fetchTVShowDetails } from '../../../services/http/modules/tvShows';
@@ -54,10 +53,7 @@ const schemaAddShowValidator = yup
   .required();
 
 const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
-  const [episodes, setEpisodes] = useStorageState<ISavedEpisodes[]>({
-    initialValue: [] as ISavedEpisodes[],
-    labelStorage: EPISODES_LOCAL_STORAGE_KEY,
-  });
+  const { addTvShow } = useTvShow();
 
   const toast = useToast();
 
@@ -117,7 +113,7 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
   );
 
   const onSubmit = useCallback(
-    ({
+    async ({
       tvShow: { label: tvShowName },
       season,
       episode: { value, description, thumbnail, other },
@@ -129,10 +125,10 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
           description: String(description),
           thumbnail: `https://image.tmdb.org/t/p/original${thumbnail}`,
           season_number: season,
-          number: Number(other),
+          episode_number: Number(other),
         };
 
-        setEpisodes([...episodes, episodeToSave]);
+        await addTvShow(episodeToSave);
 
         toast({
           title: 'Salvo com sucesso',
@@ -145,7 +141,7 @@ const ModalAddShow: React.FC<IModalAddShowProps> = ({ isOpen, onClose }) => {
 
         onClose();
       } catch (err) {
-        console.log('Error to save tv show: ', err);
+        console.error('Error to save tv show: ', err);
         toast({
           title: 'Erro ao salvar',
           description: 'Não foi possível salvar a série! Tente novamente',
