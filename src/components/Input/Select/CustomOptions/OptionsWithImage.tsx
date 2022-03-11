@@ -44,15 +44,8 @@ const OptionWithThumbnail: React.FC<OptionProps> = ({
         align="flex-start"
         justify="flex-start"
       >
-        <Text color={thumbnail ? 'gray.800' : 'gray.400'} fontSize="md">
-          {label}
-        </Text>
-        <Text
-          noOfLines={3}
-          lineHeight="shorter"
-          color="gray.600"
-          fontSize="small"
-        >
+        <Text fontSize="md">{label}</Text>
+        <Text noOfLines={3} lineHeight="shorter" fontSize="small">
           {description}
         </Text>
       </Flex>
