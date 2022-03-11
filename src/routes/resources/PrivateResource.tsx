@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Navigate } from 'react-router-dom';
 
-import Layout from '../components/Layout';
+import Layout from '../../components/Layout';
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 interface IPrivateResourceProps {
   children: JSX.Element;

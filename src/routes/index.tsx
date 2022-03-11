@@ -1,7 +1,9 @@
 import React, { lazy, Suspense } from 'react';
 
 import { BrowserRouter, Routes as Switch, Route } from 'react-router-dom';
-import { PrivateResource } from './PrivateResource';
+import { Loading } from '../components/Loading';
+import { PrivateResource } from './resources/PrivateResource';
+import RedirectResource from './resources/RedirectResource';
 
 const ListShows = lazy(() =>
   import('../pages/ListShows').then(module => ({
@@ -18,9 +20,16 @@ const SignIn = lazy(() =>
 const Routes: React.FC = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <Switch>
-          <Route path="/" element={<SignIn />} />
+          <Route
+            path="/"
+            element={
+              <RedirectResource>
+                <SignIn />
+              </RedirectResource>
+            }
+          />
           <Route
             path="/list-shows"
             element={

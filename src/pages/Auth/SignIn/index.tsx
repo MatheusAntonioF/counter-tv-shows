@@ -48,7 +48,7 @@ function SignIn() {
 
         await signIn({ email, password });
 
-        navigate('/list-shows');
+        navigate('/list-shows', { replace: true });
       } catch (error) {
         console.error('Error to authenticate user: ', error);
 
@@ -85,12 +85,18 @@ function SignIn() {
           p={8}
         >
           <Stack spacing={4}>
-            <Input label="Email" {...register('email')} error={errors.email} />
+            <Input
+              label="Email"
+              {...register('email')}
+              placeholder="Digite seu email"
+              error={errors.email}
+            />
 
             <Input
               label="Senha"
               type="password"
               {...register('password')}
+              placeholder="Digite sua senha"
               error={errors.password}
             />
 
